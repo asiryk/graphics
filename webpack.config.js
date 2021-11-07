@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { resolve, join } from "path";
-import HTMLPlugin from "html-webpack-plugin";
+const { resolve, join } = require("path");
+const HTMLPlugin = require("html-webpack-plugin");
 
 const BUILD_PATH = resolve("target");
 const SOURCE_PATH = resolve("src");
@@ -68,4 +68,4 @@ function getDevServer() {
   };
 }
 
-export default config;
+module.exports = config;
