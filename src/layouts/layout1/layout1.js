@@ -103,7 +103,7 @@ function createInputElement(htmlId) {
 
 function createInputRadius(id) {
   const { container, input, label } = createInputElement("r" + id);
-  input.value = window.screen1.dimensions["r" + id] || radii[id - 1].toString();
+  input.value = window.screen1.dimensions["r" + id] || "";
   input.setAttribute("placeholder", "Radius " + id);
   label.innerText = "R" + id;
 

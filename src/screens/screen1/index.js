@@ -16,12 +16,13 @@ function handleGlobals({ ...transformations }) {
   for (const transformationName in transformations) {
     const transformation = transformations[transformationName];
     for (const prop in transformation) {
+      const input = document.getElementById(prop);
       if (isNumber(transformation[prop])) {
         window.screen1[transformationName][prop] = transformation[prop];
-      } else if (!window.screen1[transformationName][prop]) {
-        document.getElementById(prop).value = "";
+      } else if (!isNumber(window.screen1[transformationName][prop])) {
+        if (input) input.value = "";
       } else {
-        document.getElementById(prop).value = window.screen1[transformationName][prop];
+        if (input) input.value = window.screen1[transformationName][prop];
       }
     }
   }
@@ -44,10 +45,10 @@ window.addEventListener("renderScreen1", event => {
 
 window.screen1 = {
   dimensions: {
-    r1: 0,
-    r2: 0,
-    r3: 0,
-    r4: 0,
+    r1: 4,
+    r2: 3,
+    r3: 1,
+    r4: 1.5,
   },
   linear: {
     dx: 0,
@@ -57,8 +58,12 @@ window.screen1 = {
     angle: 0,
     scale: 1,
   },
-  projective: {},
-  affine: {},
+  projective: {
+    a00: 0, a01: 0, a02: 50000,
+    a10: 50000, a11: 0, a12: 1,
+    a20: 0, a21: 50000, a22: 1,
+  },
+  affine: { a: 1, b: 0, c: 0, d: 0, e: 1, f: 0 },
 };
 
 export default canvas;

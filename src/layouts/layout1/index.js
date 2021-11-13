@@ -4,35 +4,38 @@ import layout2 from "./layout2";
 import layout3 from "./layout3";
 
 export function triggerRendering() {
-  const r1 = document.getElementById("r1").value;
-  const r2 = document.getElementById("r2").value;
-  const r3 = document.getElementById("r3").value;
-  const r4 = document.getElementById("r4").value;
-  const dx = document.getElementById("dx").value;
-  const dy = document.getElementById("dy").value;
-  const rotX = document.getElementById("rotX").value;
-  const rotY = document.getElementById("rotY").value;
-  const angle = document.getElementById("angle").value;
-  const scale = document.getElementById("scale").value;
+  const r1 = getValue("r1");
+  const r2 = getValue("r2");
+  const r3 = getValue("r3");
+  const r4 = getValue("r4");
+  const dx = getValue("dx");
+  const dy = getValue("dy");
+  const rotX = getValue("rotX");
+  const rotY = getValue("rotY");
+  const angle = getValue("angle");
+  const scale = getValue("scale");
+  const a00 = getValue("a00");
+  const a01 = getValue("a01");
+  const a02 = getValue("a02");
+  const a10 = getValue("a10");
+  const a11 = getValue("a11");
+  const a12 = getValue("a12");
+  const a20 = getValue("a20");
+  const a21 = getValue("a21");
+  const a22 = getValue("a22");
+  const a = getValue("a");
+  const b = getValue("b");
+  const c = getValue("c");
+  const d = getValue("d");
+  const e = getValue("e");
+  const f = getValue("f");
 
   const event = new CustomEvent("renderScreen1", {
     detail: {
-      dimensions: {
-        r1: parseFloat(r1),
-        r2: parseFloat(r2),
-        r3: parseFloat(r3),
-        r4: parseFloat(r4),
-      },
-      linear: {
-        dx: parseFloat(dx),
-        dy: parseFloat(dy),
-        rotX: parseFloat(rotX),
-        rotY: parseFloat(rotY),
-        angle: parseFloat(angle),
-        scale: parseFloat(scale),
-      },
-      projective: {},
-      affine: {},
+      dimensions: { r1, r2, r3, r4 },
+      linear: { dx, dy, rotX, rotY, angle, scale },
+      projective: { a00, a01, a02, a10, a11, a12, a20, a21, a22 },
+      affine: { a, b, c, d, e, f },
     },
   });
 
@@ -70,5 +73,10 @@ window.addEventListener("layoutAffine", () => {
   container.append(layout3);
   container.append(div);
 });
+
+function getValue(id) {
+  const input = document.getElementById(id);
+  return input ? parseFloat(input.value) : null;
+}
 
 export default container;

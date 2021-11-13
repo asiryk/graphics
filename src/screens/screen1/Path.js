@@ -1,5 +1,8 @@
-import { circlePoint, identity, isNumber, pipe } from "../../helpers/utils";
+import { circlePoint, identity, pipe, rad, rotatePoint } from "../../helpers/utils";
 import { HEIGHT, STEP, WIDTH } from "./config";
+
+const Ox = WIDTH / 2;
+const Oy = HEIGHT / 2;
 
 export default class Path extends Path2D {
   constructor({ thickness = 2, color = "black", shouldApplyLinear = true } = {}) {
@@ -12,14 +15,16 @@ export default class Path extends Path2D {
   moveTo(x, y) {
     super.moveTo(...(pipe(
       this.shouldApplyLinear ? applyLinear : identity,
-      // applyProjective,
+      applyProjective,
+      applyAffine,
     )([x, y])));
   }
 
   lineTo(x, y) {
     super.lineTo(...(pipe(
       this.shouldApplyLinear ? applyLinear : identity,
-      // applyProjective,
+      applyProjective,
+      applyAffine,
     )([x, y])));
   }
 
@@ -46,31 +51,9 @@ export default class Path extends Path2D {
 function applyLinear(point) {
   return pipe(
     move,
+    rotate,
     scale,
   )(point);
-}
-
-function move([x, y]) {
-  const { dx, dy } = window.screen1.linear;
-  const resX = isNumber(dx) ? dx * STEP : 0;
-  const resY = isNumber(dy) ? dy * STEP : 0;
-  return [x + resX, y - resY];
-}
-
-function scale([x, y]) {
-  const Ox = WIDTH / 2;
-  const Oy = HEIGHT / 2;
-  const { scale } = window.screen1.linear;
-  const resScale = isNumber(scale) ? scale : 1;
-  const relativeX = (Ox - x) / STEP;
-  const relativeY = (Oy - y) / STEP;
-  const scaledRelativeX = relativeX * resScale;
-  const scaledRelativeY = relativeY * resScale;
-  return [Ox - scaledRelativeX * STEP, Oy - scaledRelativeY * STEP];
-}
-
-function rotate() {
-
 }
 
 function applyProjective([x, y]) {
@@ -79,4 +62,36 @@ function applyProjective([x, y]) {
   const numeratorX = (a10 * a12 * x + a20 * a22 * y) + a00; // a00 - shift x
   const numeratorY = (a11 * a12 * x + a21 * a22 * y) - a01; // a11 - shift y
   return [numeratorX / denominator, numeratorY / denominator];
+}
+
+function applyAffine([x, y]) {
+  const { a, b, c, d, e, f } = window.screen1.affine;
+  const x1 = a * x - b * y + c * STEP;
+  const y1 = -d * x + e * y - f * STEP;
+  return [x1, y1];
+}
+
+function move([x, y]) {
+  const { dx, dy } = window.screen1.linear;
+  return [x + dx * STEP, y - dy * STEP];
+}
+
+function scale([x, y]) {
+  let { scale } = window.screen1.linear;
+  const [relX, relY] = getRelativePoint([x, y]);
+  return getAbsolutePoint([relX * scale, relY * scale]);
+}
+
+function rotate(point) {
+  const { rotX, rotY, angle } = window.screen1.linear;
+  return getAbsolutePoint(
+    rotatePoint(getRelativePoint(point), [rotX, rotY], rad(angle)));
+}
+
+function getRelativePoint([x, y]) {
+  return [(x - Ox) / STEP, (Oy - y) / STEP];
+}
+
+function getAbsolutePoint([x, y]) {
+  return [Ox + x * STEP, Oy - y * STEP];
 }

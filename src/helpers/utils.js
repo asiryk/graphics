@@ -10,6 +10,19 @@ export function circlePoint(x0, y0, radius, angle, clockwise = false) {
   return [x, y];
 }
 
+/**
+ * Rotate [x, y] around [cx, cy]
+ */
+export function rotatePoint([x, y], [cx, cy], angle, clockwise = false) {
+  angle *= clockwise ? 1 : -1;
+  if (angle === 0) return [x, y];
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+  const nx = (cos * (x - cx)) + (sin * (y - cy)) + cx;
+  const ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+  return [nx, ny];
+}
+
 export function rad(deg) {
   return deg * Math.PI / 180;
 }
@@ -23,8 +36,6 @@ export function pipe(...fns) {
     const list = [...fns];
 
     while (list.length > 0) {
-      // take the first function from the list
-      // and execute it
       result = list.shift()(result);
     }
 
