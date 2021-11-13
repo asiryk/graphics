@@ -1,6 +1,6 @@
 import { HEIGHT, STEP, WIDTH } from "./config";
 import { circlePoint, rad } from "../../helpers/utils";
-import Path from "../../helpers/Path";
+import Path from "./Path";
 
 export const radii = [4, 3, 1, 1.5];
 

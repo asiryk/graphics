@@ -13,3 +13,25 @@ export function circlePoint(x0, y0, radius, angle, clockwise = false) {
 export function rad(deg) {
   return deg * Math.PI / 180;
 }
+
+export function isNumber(value) {
+  return typeof value === "number" && !isNaN(value);
+}
+
+export function pipe(...fns) {
+  return function piped(result) {
+    const list = [...fns];
+
+    while (list.length > 0) {
+      // take the first function from the list
+      // and execute it
+      result = list.shift()(result);
+    }
+
+    return result;
+  };
+}
+
+export function identity(x) {
+  return x;
+}

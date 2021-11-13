@@ -1,7 +1,7 @@
 import Path from "./Path";
 
 export function getGrid(width, height, cellSize) {
-  const path = new Path(1, "#6F91C4");
+  const path = new Path({ thickness: 1, color: "#6F91C4", shouldApplyLinear: false });
 
   for (let y = cellSize; y < height; y += cellSize) {
     path.moveTo(0, y + .5);
@@ -17,7 +17,7 @@ export function getGrid(width, height, cellSize) {
 }
 
 export function getAxes(width, height) {
-  const path = new Path(2, "#6F91C4");
+  const path = new Path({ thickness: 2, color: "#6F91C4", shouldApplyLinear: false });
   path.moveTo(0, height / 2);
   path.lineTo(width, height / 2);
 

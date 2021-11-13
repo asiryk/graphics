@@ -1,10 +1,11 @@
-import { circlePoint } from "./utils";
+import { circlePoint } from "../../helpers/utils";
 
 export default class Path extends Path2D {
-  constructor(thickness = 2, color = "black") {
+  constructor({thickness = 2, color = "black", shouldApplyLinear = true}= {}) {
     super();
     this.thickness = thickness;
     this.color = color;
+    this.shouldApplyLinear = !!shouldApplyLinear;
   }
 
   moveTo(x, y) {
