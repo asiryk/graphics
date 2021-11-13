@@ -55,7 +55,7 @@ window.screen1 = {
     rotX: 0,
     rotY: 0,
     angle: 0,
-    scale: 0,
+    scale: 1,
   },
   projective: {},
   affine: {},
