@@ -3,7 +3,7 @@ import layout1 from "./layout1";
 import layout2 from "./layout2";
 import layout3 from "./layout3";
 
-export function triggerRendering() {
+export function triggerRendering(_, shouldMove = false) {
   const r1 = getValue("r1");
   const r2 = getValue("r2");
   const r3 = getValue("r3");
@@ -36,6 +36,7 @@ export function triggerRendering() {
       linear: { dx, dy, rotX, rotY, angle, scale },
       projective: { a00, a01, a02, a10, a11, a12, a20, a21, a22 },
       affine: { a, b, c, d, e, f },
+      shouldMove,
     },
   });
 

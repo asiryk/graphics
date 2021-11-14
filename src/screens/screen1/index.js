@@ -12,9 +12,16 @@ function clearCanvas() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function handleGlobals({ ...transformations }) {
+const memo = {
+  angle: { last: 0, initial: 0 },
+  dx: { last: 0, initial: 0 },
+  dy: { last: 0, initial: 0 },
+};
+
+function handleGlobals({ ...transformations }, shouldMove) {
   for (const transformationName in transformations) {
     const transformation = transformations[transformationName];
+    // region apply values from inputs and validate 'em
     for (const prop in transformation) {
       const input = document.getElementById(prop);
       if (isNumber(transformation[prop])) {
@@ -25,7 +32,25 @@ function handleGlobals({ ...transformations }) {
         if (input) input.value = window.screen1[transformationName][prop];
       }
     }
+    // endregion
   }
+
+  // region handle moving
+  if (shouldMove) {
+    const linear = window.screen1.linear;
+    for (const key in memo) {
+      const input = document.getElementById(key);
+      const prop = memo[key];
+      if (linear[key] === prop.last) {
+        linear[key] += prop.initial;
+        prop.last = linear[key];
+        if (input) input.value = linear[key];
+      } else {
+        prop.initial = prop.last = linear[key];
+      }
+    }
+  }
+  // endregion
 }
 
 window.addEventListener("renderScreen1", event => {
@@ -35,7 +60,9 @@ window.addEventListener("renderScreen1", event => {
   const projective = event.detail.projective;
   const affine = event.detail.affine;
 
-  handleGlobals({ dimensions, linear, projective, affine });
+  const shouldMove = event.detail.shouldMove;
+
+  handleGlobals({ dimensions, linear, projective, affine }, shouldMove);
 
   let { r1, r2, r3, r4 } = window.screen1.dimensions;
 

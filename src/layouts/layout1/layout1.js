@@ -81,7 +81,7 @@ const div = document.createElement("div");
   // endregion
 
   div.appendChild(document.createElement("br"));
-  div.append(cDx, cDy, cRotX, cRotY, cAngle, cScale, createButton(triggerRendering, "Render"));
+  div.append(cDx, cDy, cRotX, cRotY, cAngle, cScale, createButton(e => triggerRendering(e, true), "Render"));
 }
 
 function createInputElement(htmlId) {
