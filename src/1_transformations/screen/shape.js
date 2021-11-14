@@ -2,8 +2,6 @@ import { HEIGHT, STEP, WIDTH } from "./config";
 import { circlePoint, rad } from "../../helpers/utils";
 import Path from "./Path";
 
-export const radii = [4, 3, 1, 1.5];
-
 const Ox = WIDTH / 2;
 const Oy = HEIGHT / 2;
 

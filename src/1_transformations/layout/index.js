@@ -1,7 +1,7 @@
 import image from "./image";
-import layout1 from "./layout1";
-import layout2 from "./layout2";
-import layout3 from "./layout3";
+import initLayout1 from "./layout1";
+import initLayout2 from "./layout2";
+import initLayout3 from "./layout3";
 
 export function triggerRendering(_, shouldMove = false) {
   const r1 = getValue("r1");
@@ -43,41 +43,53 @@ export function triggerRendering(_, shouldMove = false) {
   window.dispatchEvent(event);
 }
 
-const container = document.createElement("div");
-container.style.display = "flex";
-container.style.height = "100%";
-container.style.flexDirection = "column";
-container.append(layout1);
+let layout1;
+let layout2;
+let layout3;
 
-const div = document.createElement("div");
-const img = document.createElement("img");
-img.style.width = "100%";
-img.setAttribute("src", image);
-div.appendChild(img);
-div.style.marginTop = "auto";
-container.appendChild(div);
-
-window.addEventListener("layoutLinear", () => {
-  container.innerHTML = "";
+function initLayout() {
+  const container = document.createElement("div");
+  container.style.display = "flex";
+  container.style.height = "100%";
+  container.style.flexDirection = "column";
+  layout1 = !layout1 ? initLayout1() : layout1;
   container.append(layout1);
-  container.append(div);
-});
 
-window.addEventListener("layoutProjective", () => {
-  container.innerHTML = "";
-  container.append(layout2);
-  container.append(div);
-});
+  const div = document.createElement("div");
+  const img = document.createElement("img");
+  img.style.width = "100%";
+  img.setAttribute("src", image);
+  div.appendChild(img);
+  div.style.marginTop = "auto";
+  container.appendChild(div);
 
-window.addEventListener("layoutAffine", () => {
-  container.innerHTML = "";
-  container.append(layout3);
-  container.append(div);
-});
+  window.addEventListener("layoutLinear", () => {
+    container.innerHTML = "";
+    layout1 = !layout1 ? initLayout1() : layout1;
+    container.append(layout1);
+    container.append(div);
+  });
+
+  window.addEventListener("layoutProjective", () => {
+    container.innerHTML = "";
+    layout2 = !layout2 ? initLayout2() : layout2;
+    container.append(layout2);
+    container.append(div);
+  });
+
+  window.addEventListener("layoutAffine", () => {
+    container.innerHTML = "";
+    layout3 = !layout3 ? initLayout3() : layout3;
+    container.append(layout3);
+    container.append(div);
+  });
+
+  return container;
+}
 
 function getValue(id) {
   const input = document.getElementById(id);
   return input ? parseFloat(input.value) : null;
 }
 
-export default container;
+export default initLayout;
