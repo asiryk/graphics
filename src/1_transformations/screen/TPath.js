@@ -1,4 +1,4 @@
-import { circlePoint, identity, pipe, rad, rotatePoint } from "../../helpers/utils";
+import { circlePoint, getAbsolutePoint, getRelativePoint, identity, pipe, rad, rotatePoint } from "../../helpers/utils";
 import { HEIGHT, STEP, WIDTH } from "./config";
 import Path from "../../helpers/Path";
 
@@ -79,20 +79,12 @@ function move([x, y]) {
 
 function scale([x, y]) {
   let { scale } = window.screen1.linear;
-  const [relX, relY] = getRelativePoint([x, y]);
-  return getAbsolutePoint([relX * scale, relY * scale]);
+  const [relX, relY] = getRelativePoint(Ox, Oy, STEP)(x, y);
+  return getAbsolutePoint(Ox, Oy, STEP)(relX * scale, relY * scale);
 }
 
 function rotate(point) {
   const { rotX, rotY, angle } = window.screen1.linear;
-  return getAbsolutePoint(
-    rotatePoint(getRelativePoint(point), [rotX, rotY], rad(angle)));
-}
-
-function getRelativePoint([x, y]) {
-  return [(x - Ox) / STEP, (Oy - y) / STEP];
-}
-
-function getAbsolutePoint([x, y]) {
-  return [Ox + x * STEP, Oy - y * STEP];
+  return getAbsolutePoint(Ox, Oy, STEP)(
+    ...rotatePoint(getRelativePoint(Ox, Oy, STEP)(...point), [rotX, rotY], rad(angle)));
 }

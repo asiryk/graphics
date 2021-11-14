@@ -46,3 +46,15 @@ export function pipe(...fns) {
 export function identity(x) {
   return x;
 }
+
+export function getRelativePoint(Ox, Oy, step) {
+  return function (x, y) {
+    return [(x - Ox) / step, (Oy - y) / step];
+  }
+}
+
+export function getAbsolutePoint(Ox, Oy, step) {
+  return function (x, y) {
+    return [Ox + x * step, Oy - y * step];
+  }
+}

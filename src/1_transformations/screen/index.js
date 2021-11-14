@@ -40,6 +40,8 @@ function initScreen() {
     if (shouldMove) {
       const linear = window.screen1.linear;
       for (const key in memo) {
+        if (linear.angle !== 0 && key !== "angle") continue;
+
         const input = document.getElementById(key);
         const prop = memo[key];
         if (linear[key] === prop.last) {
