@@ -1,6 +1,6 @@
 import { HEIGHT, STEP, WIDTH } from "./config";
 import { circlePoint, rad } from "../../helpers/utils";
-import Path from "./Path";
+import TPath from "./TPath";
 
 const Ox = WIDTH / 2;
 const Oy = HEIGHT / 2;
@@ -9,7 +9,7 @@ const asin = Math.asin;
 const sqrt = Math.sqrt;
 
 export default function generateShape(r1, r2, r3, r4) {
-  const path = new Path();
+  const path = new TPath();
 
   const R = 2 * r1;
   const y1 = r1 - r3;

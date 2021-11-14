@@ -1,10 +1,11 @@
 import { circlePoint, identity, pipe, rad, rotatePoint } from "../../helpers/utils";
 import { HEIGHT, STEP, WIDTH } from "./config";
+import Path from "../../helpers/Path";
 
 const Ox = WIDTH / 2;
 const Oy = HEIGHT / 2;
 
-export default class Path extends Path2D {
+export default class TPath extends Path {
   constructor({ thickness = 2, color = "black", shouldApplyLinear = true } = {}) {
     super();
     this.thickness = thickness;
