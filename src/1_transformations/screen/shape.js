@@ -67,5 +67,6 @@ export default function generateShape(r1, r2, r3, r4) {
     path.arc(Ox - r1 * STEP, Oy + r1 * STEP, r3 * STEP, rad(0), rad(360), true);
   }
 
+  path.closePath();
   return path;
 }

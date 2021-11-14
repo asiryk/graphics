@@ -9,6 +9,7 @@ export function drawGrid(width, height, cellSize, path) {
     path.lineTo(x + .5, height);
   }
 
+  path.closePath()
   return path;
 }
 
@@ -19,5 +20,6 @@ export function drawAxes(width, height, path) {
   path.moveTo(width / 2, 0);
   path.lineTo(width / 2, height);
 
+  path.closePath()
   return path;
 }

@@ -14,16 +14,18 @@ export default class TPath extends Path {
   }
 
   moveTo(x, y) {
+    const applyLinearOrDoNothing = this.shouldApplyLinear ? applyLinear : identity;
     super.moveTo(...(pipe(
-      this.shouldApplyLinear ? applyLinear : identity,
+      applyLinearOrDoNothing,
       applyProjective,
       applyAffine,
     )([x, y])));
   }
 
   lineTo(x, y) {
+    const applyLinearOrDoNothing = this.shouldApplyLinear ? applyLinear : identity;
     super.lineTo(...(pipe(
-      this.shouldApplyLinear ? applyLinear : identity,
+      applyLinearOrDoNothing,
       applyProjective,
       applyAffine,
     )([x, y])));
@@ -79,12 +81,12 @@ function move([x, y]) {
 
 function scale([x, y]) {
   let { scale } = window.screen1.linear;
-  const [relX, relY] = getRelativePoint(Ox, Oy, STEP)(x, y);
-  return getAbsolutePoint(Ox, Oy, STEP)(relX * scale, relY * scale);
+  const [relX, relY] = getRelativePoint(Ox, Oy, STEP)([x, y]);
+  return getAbsolutePoint(Ox, Oy, STEP)([relX * scale, relY * scale]);
 }
 
 function rotate(point) {
   const { rotX, rotY, angle } = window.screen1.linear;
   return getAbsolutePoint(Ox, Oy, STEP)(
-    ...rotatePoint(getRelativePoint(Ox, Oy, STEP)(...point), [rotX, rotY], rad(angle)));
+    rotatePoint(getRelativePoint(Ox, Oy, STEP)(point), [rotX, rotY], rad(angle)));
 }

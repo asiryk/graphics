@@ -1,5 +1,5 @@
 import TPath from "./TPath";
-import { drawAxes, drawGrid } from "../../helpers/grid";
+import { drawAxes, drawGrid } from "../../helpers/gridAbs";
 
 export function getGrid(width, height, cellSize) {
   const path = new TPath({ thickness: 1, color: "#6F91C4", shouldApplyLinear: false });
