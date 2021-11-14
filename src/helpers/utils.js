@@ -31,30 +31,26 @@ export function isNumber(value) {
   return typeof value === "number" && !isNaN(value);
 }
 
-export function pipe(...fns) {
-  return function piped(result) {
-    const list = [...fns];
+export const pipe = (...fns) => x => {
+  if (fns.length === 0) return x;
+  const fn = fns.shift();
+  const res = fn(x);
+  if (fns.length === 0) return res;
+  return pipe(...fns)(res);
+};
 
-    while (list.length > 0) {
-      result = list.shift()(result);
-    }
+export const partial = (fn, x) => (...args) => fn(...args, x);
 
-    return result;
+export const identity = x => x;
+
+export function getRelativePoint(Ox, Oy, step) {
+  return function ([x, y]) {
+    return [(x - Ox) / step, (Oy - y) / step];
   };
 }
 
-export function identity(x) {
-  return x;
-}
-
-export function getRelativePoint(Ox, Oy, step) {
-  return function (x, y) {
-    return [(x - Ox) / step, (Oy - y) / step];
-  }
-}
-
 export function getAbsolutePoint(Ox, Oy, step) {
-  return function (x, y) {
+  return function ([x, y]) {
     return [Ox + x * step, Oy - y * step];
-  }
+  };
 }
