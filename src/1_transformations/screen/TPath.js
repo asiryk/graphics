@@ -61,17 +61,19 @@ function applyLinear(point) {
 
 function applyProjective([x, y]) {
   const { a00, a01, a02, a10, a11, a12, a20, a21, a22 } = window.screen1.projective;
+  [x, y] = getRelativePoint(Ox, Oy, STEP)([x, y]);
   const denominator = a12 * x + a22 * y + a02; // a02 - weight
   const numeratorX = (a10 * a12 * x + a20 * a22 * y) + a00; // a00 - shift x
-  const numeratorY = (a11 * a12 * x + a21 * a22 * y) - a01; // a11 - shift y
-  return [numeratorX / denominator, numeratorY / denominator];
+  const numeratorY = (a11 * a12 * x + a21 * a22 * y) + a01; // a11 - shift y
+  return getAbsolutePoint(Ox, Oy, STEP)([numeratorX / denominator, numeratorY / denominator]);
 }
 
 function applyAffine([x, y]) {
   const { a, b, c, d, e, f } = window.screen1.affine;
-  const x1 = a * x - b * y + c * STEP;
-  const y1 = -d * x + e * y - f * STEP;
-  return [x1, y1];
+  [x, y] = getRelativePoint(Ox, Oy, STEP)([x, y]);
+  const x1 = a * x + b * y + c;
+  const y1 = d * x + e * y + f;
+  return getAbsolutePoint(Ox, Oy, STEP)([x1, y1]);
 }
 
 function move([x, y]) {
