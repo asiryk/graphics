@@ -8,21 +8,20 @@ function initLayout() {
     br(),
     div(span("D"), inputNumber("d", 0)),
     br(),
-    div(inputNumber("angleMin", 0, 180), span("< φ(deg) <"), inputNumber("angleMax", 0, 180)),
-    div(span("Current φ(deg)"), inputNumber("angleCurrent", 0, 180)),
+    div(inputNumber("angleMin", 1, 179), span("< φ(deg) <"), inputNumber("angleMax", 1, 179)),
+    div(span("Current φ(deg)"), inputNumber("angleCurrent", 1, 179)),
     br(),
     div(span("Dx"), inputNumber("dx")),
     div(span("Dy"), inputNumber("dy")),
     br(),
-    div(span("Rotation, deg."), inputNumber("rotation")),
+    div(span("Scale"), inputNumber("scale", null, null, 0.1)),
     br(),
-    div(span("Scale"), inputNumber("scale")),
   );
 
   return container;
 }
 
-function inputNumber(id, min, max) {
+function inputNumber(id, min, max, step) {
   const div = document.createElement("div");
   const input = document.createElement("input");
   div.appendChild(input);
@@ -36,13 +35,14 @@ function inputNumber(id, min, max) {
   input.setAttribute("type", "number");
   isNumber(min) && input.setAttribute("min", min);
   isNumber(max) && input.setAttribute("max", max);
+  isNumber(step) && input.setAttribute("step", step);
 
   input.onchange = e => {
     const min = parseFloat(e.target.getAttribute("min"));
     const max = parseFloat(e.target.getAttribute("max"));
     let value = parseFloat(e.target.value);
 
-    if (!value) return;
+    if (!isNumber(value)) return;
     if (value < min) {
       value = min;
       e.target.value = min.toString();

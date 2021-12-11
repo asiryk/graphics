@@ -8,8 +8,8 @@ import { drawNormal, drawTangent } from "./tangentLines";
 function initScreen() {
   window.screen2 = {
     d: 10,
-    angleMin: 0,
-    angleMax: 180,
+    angleMin: 1,
+    angleMax: 179,
     angleCurrent: 90,
     dx: 0,
     dy: 0,
