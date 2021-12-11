@@ -4,7 +4,7 @@ import { rad } from "../../helpers/utils";
 import { MAX_X, MAX_Y } from "./config";
 
 export function drawTangent() {
-  const path = new CPath({ shouldApplyLinear: true });
+  const path = new CPath({ shouldApplyLinear: true, color: "green" });
   const { angleCurrent, d } = window.screen2;
   const theta = rad(90) - rad(angleCurrent);
   const [x, y] = curvePoint(d, theta);
@@ -16,7 +16,7 @@ export function drawTangent() {
 }
 
 export function drawNormal() {
-  const path = new CPath({ shouldApplyLinear: true });
+  const path = new CPath({ shouldApplyLinear: true, color: "red" });
   const { angleCurrent, d } = window.screen2;
   if (angleCurrent === 90) {
     path.line([0, MAX_Y], [0, -MAX_Y]);
