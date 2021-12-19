@@ -1,11 +1,17 @@
 import init from "./layout";
 
 function initLayout() {
-  const container = document.createElement("div");
+  const div = document.createElement("div");
+  const { container, inputX, inputY } = init();
 
-  container.append(init());
+  div.append(container);
 
-  return container;
+  window.addEventListener("3_bezier_pivot_change", event => {
+    inputX.value = event.detail.point[0];
+    inputY.value = event.detail.point[1];
+  });
+
+  return div;
 }
 
 export function animate() {

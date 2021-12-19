@@ -8,6 +8,7 @@ import BPath from "./BPath";
 import { shape1, shape2 } from "./shape";
 
 let DEBUG = false;
+export const POINT = [210, 359];
 
 function initScreen() {
   const canvas = initCanvas(ABS_WIDTH, ABS_HEIGHT);
@@ -31,14 +32,15 @@ function initScreen() {
     const sec = 2;
     const frames = Math.round(fps * sec);
     currentShape = shapeTo;
-    shapeFrom = shapeFrom.flat();
+    shapeFrom = putPointToShape(shapeFrom).flat();
     shapeTo = shapeTo.flat();
 
     let i = 0;
     const int = setInterval(() => {
       if (i <= frames) {
-        const newShape = shapeFrom.map((point, j) => getInterimPoint(point, shapeTo[j], i, frames));
-        reRender(groupBezierPivots(newShape));
+        const newShape = groupBezierPivots(shapeFrom.map((point, j) => getInterimPoint(point, shapeTo[j], i, frames)));
+        notifyPivotChange(newShape);
+        reRender(newShape);
         i++;
       } else {
         animating = false;
@@ -50,10 +52,9 @@ function initScreen() {
   window.addEventListener("3_bezier_animate", () => animate(currentShape, currentShape === shape1 ? shape2 : shape1));
   window.addEventListener("3_bezier_debug", event => (DEBUG = event.detail.debug, reRender(currentShape)));
   window.addEventListener("3_bezier_move_pivot", event => {
-    // todo rerender on move point
-    // if (event.detail.x) SUBSTITUTION_POINT[0] = event.detail.x;
-    // else SUBSTITUTION_POINT[1] = event.detail.y;
-    // reRender(currentShape);
+    if (event.detail.x) POINT[0] = event.detail.x;
+    else POINT[1] = event.detail.y;
+    reRender(putPointToShape(currentShape));
   });
 
   return canvas;
@@ -66,6 +67,7 @@ function pathShape(shape) {
 function debug(shape) {
   const path = new BPath({ thickness: 2, color: "green" });
   if (DEBUG) {
+    shape = putPointToShape(shape);
     shape.flat().forEach(point => {
       path.moveTo(...point);
       path.arc(...point, 1, 0, 2 * Math.PI);
@@ -73,6 +75,19 @@ function debug(shape) {
   }
   path.closePath();
   return path;
+}
+
+function notifyPivotChange(shape) {
+  const point = shape[6][1];
+  POINT[0] = point[0];
+  POINT[1] = point[1];
+  window.dispatchEvent(new CustomEvent("3_bezier_pivot_change", { detail: { point } }));
+}
+
+function putPointToShape(shape) {
+  shape = [...shape];
+  shape[6][1] = [...POINT];
+  return shape;
 }
 
 export default initScreen;

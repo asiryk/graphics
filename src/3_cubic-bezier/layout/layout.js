@@ -1,7 +1,11 @@
 import { animate, movePivot, turnOnDebug } from "./index";
+import { POINT } from "../screen";
 
 function initLayout() {
   const container = document.createElement("div");
+
+  const inputX = inputNumber("bezier_x", POINT[0]);
+  const inputY = inputNumber("bezier_y", POINT[1]);
 
   container.append(
     h4("Cubic bezier"),
@@ -10,12 +14,12 @@ function initLayout() {
     br(),
     checkbox("Debug", e => turnOnDebug(e)),
     br(),
-    div(span("X"), inputNumber("bezier_x", 225)),
+    div(span("X"), inputX),
     br(),
-    div(span("Y"), inputNumber("bezier_y", 191)),
+    div(span("Y"), inputY),
   );
 
-  return container;
+  return { container, inputX: inputX.children[0], inputY: inputY.children[0] };
 }
 
 function h4(text) {
@@ -87,6 +91,7 @@ function inputNumber(id, value) {
   input.style.width = "12ch";
   input.setAttribute("class", "form-select input-sm");
   input.setAttribute("type", "number");
+  input.setAttribute("step", "5");
 
   input.onchange = e => movePivot(e);
 
