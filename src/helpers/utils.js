@@ -54,3 +54,56 @@ export function getAbsolutePoint(Ox, Oy, step) {
     return [Ox + x * step, Oy - y * step];
   };
 }
+
+const cubicRaw = (t, p0, p1, p2, p3) =>
+  ((1 - t) ** 3) * p0 + 3 * ((1 - t) ** 2) * t * p1 + 3 * (1 - t) * (t ** 2) * p2 + (t ** 3) * p3;
+
+function cubicBezierPoint(t, [x0, y0], [x1, y1], [x2, y2], [x3, y3]) {
+  const x = cubicRaw(t, x0, x1, x2, x3);
+  const y = cubicRaw(t, y0, y1, y2, y3);
+  return [x, y];
+}
+
+export function bezier(p0, p1, p2, p3) {
+  const scale = 100;
+  const curvePieces = [];
+  for (let i = 0; i < 1 * scale; i++) {
+    const from = cubicBezierPoint(i / scale, p0, p1, p2, p3);
+    const to = cubicBezierPoint((i + 1) / scale, p0, p1, p2, p3);
+    curvePieces.push({ from, to });
+  }
+
+  return curvePieces;
+}
+
+export function subtractPoints(a, b) {
+  return [a[0] - b[0], a[1] - b[1]];
+}
+
+export function addPoints(a, b) {
+  return [a[0] + b[0], a[1] + b[1]];
+}
+
+export function dividePoint(point, delimiter) {
+  return [point[0] / delimiter, point[1] / delimiter];
+}
+
+export function multiplyPoint(point, multiplier) {
+  return [point[0] * multiplier, point[1] * multiplier];
+}
+
+export function getInterimPoint(pStart, pEnd, curStep, totSteps) {
+  const sub = subtractPoints(pEnd, pStart);
+  const div = dividePoint(sub, totSteps);
+  const mul = multiplyPoint(div, curStep);
+  return addPoints(pStart, mul);
+}
+
+export function groupBezierPivots(arr) {
+  const result = [];
+  for (let i = 0; i < arr.length; i += 4) {
+    result.push(arr.slice(i, i + 4))
+  }
+
+  return result;
+}
