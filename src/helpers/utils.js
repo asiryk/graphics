@@ -107,3 +107,15 @@ export function groupBezierPivots(arr) {
 
   return result;
 }
+
+function length(a, b) {
+  return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
+}
+
+export function bezierSmoothness(r11, r0, r21) {
+  const l1 = length(r11, r0);
+  const l2 = length(r21, r0);
+  const x = r0[0] - l1 / l2 * (r21[0] - r0[0]);
+  const y = r0[1] - l1 / l2 * (r21[1] - r0[1]);
+  return [x, y];
+}

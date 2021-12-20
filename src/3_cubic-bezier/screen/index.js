@@ -2,7 +2,7 @@
 
 import initCanvas from "../../helpers/initCanvas";
 import { ABS_HEIGHT, ABS_WIDTH } from "./config";
-import { bezier, getInterimPoint, groupBezierPivots, render } from "../../helpers/utils";
+import { bezier, bezierSmoothness, getInterimPoint, groupBezierPivots, render } from "../../helpers/utils";
 import { getAxes, getGrid } from "./grid";
 import BPath from "./BPath";
 import { shape1, shape2 } from "./shape";
@@ -87,6 +87,12 @@ function notifyPivotChange(shape) {
 function putPointToShape(shape) {
   shape = [...shape];
   shape[6][1] = [...POINT];
+  return applySmoothness(shape);
+}
+
+function applySmoothness(shape) {
+  shape = [...shape];
+  shape[5][2] = bezierSmoothness(shape[5][2], shape[6][0], POINT);
   return shape;
 }
 
